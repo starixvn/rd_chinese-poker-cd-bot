@@ -1,0 +1,6 @@
+@CDBot_HostAddress = http://localhost:5190
+
+GET {{CDBot_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
