@@ -11,6 +11,7 @@ public class HomeController(IBot bot) : ControllerBase
 {
     private const string ServerRunningMessage = "Server is running!";
 
+    [HttpGet("health")]
     public string Index() => ServerRunningMessage;
 
     [HttpPost("move")]
