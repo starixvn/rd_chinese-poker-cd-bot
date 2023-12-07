@@ -2,7 +2,7 @@ using ChinesePoker.Models;
 
 namespace ChinesePoker.Utilities;
 
-public class Settler(Scorer scorer)
+public class Settler(Scorer scorer): ISettler
 {
 
     public Dictionary<string, SettleResult> Settle(Dictionary<string, SegmentCards> inputCards)

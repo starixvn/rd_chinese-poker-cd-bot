@@ -1,14 +1,28 @@
+using ChinesePoker.Bots;
+using ChinesePoker.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace Controller;
 
 [ApiController]
 [Route("")]
-public class HomeController : ControllerBase
+public class HomeController(IBot bot) : ControllerBase
 {
+    private const string ServerRunningMessage = "Server is running!";
 
-    public string Index()
+    public string Index() => ServerRunningMessage;
+
+    [HttpPost("move")]
+    public PrivateModel? Move(MoveRequestModel request)
     {
-        return "Server is running!";
+        if (request.Private is null || request.Private.Input is null)
+        {
+            return null;
+        }
+
+        var result = bot.Arrange(request.Private.Input);
+        request.Private.Output = result;
+        return request.Private;
     }
 }

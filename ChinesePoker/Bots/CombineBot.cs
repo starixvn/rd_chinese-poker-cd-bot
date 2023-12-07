@@ -3,11 +3,11 @@ using ChinesePoker.Utilities;
 
 namespace ChinesePoker.Bots;
 
-public class CombineBot
+public class CombineBot: IBot
 {
-    private readonly Scorer _scorer;
-    private readonly Combination _combination;
-    private readonly Settler _settler;
+    private readonly IScorer _scorer;
+    private readonly ICombination _combination;
+    private readonly ISettler _settler;
     private readonly List<int> _segment1Rank;
     private readonly List<int> _segment2Rank;
     private readonly List<int> _segment3Rank;
@@ -132,15 +132,6 @@ public class CombineBot
             { "kind3", new List<SegmentCards>() }, 
             { "kind4", new List<SegmentCards>() } 
         };
-
-        var test = new SegmentCards()
-        {
-            Segment1 = [1, 2, 3, 4, 5],
-            Segment2 = [1, 2, 3, 4, 5],
-            Segment3 = [1, 2, 3]
-        };
-
-        var score_test = CalculateBaseScore(test);
 
         foreach (var solution in allCase)
         {

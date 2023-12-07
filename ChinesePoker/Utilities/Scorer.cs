@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace ChinesePoker.Utilities;
 
-public class Scorer 
+public class Scorer: IScorer
 {
     private readonly Dictionary<string, int[]> _dict;
 

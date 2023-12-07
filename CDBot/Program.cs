@@ -1,43 +1,43 @@
 using ChinesePoker.Bots;
 using ChinesePoker.Utilities;
-using Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+var dataPath = builder.Configuration.GetValue<string>("DataPath") ?? string.Empty;
+var scorer = new Scorer(dataPath: dataPath);
+builder.Services.AddSingleton<IScorer>(scorer);
+
+var combination = new Combination(dataPath: dataPath);
+builder.Services.AddSingleton<ICombination>(combination);
+
+builder.Services.AddSingleton<ISettler>(new Settler(scorer));
+
+builder.Services.AddSingleton<IBot>(new CombineBot(scorer, combination, new Settler(scorer)));
+
+builder.Services.AddControllers();
+
+const string ALLOWALLPOLICY = "AllowAll";
+
+builder.Services.AddCors(options => 
+{
+  options.AddPolicy(ALLOWALLPOLICY, policy =>
+  {
+    policy
+      .AllowAnyOrigin()
+      .AllowAnyMethod()
+      .AllowAnyHeader();
+  });
+});
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UsePathBase(app.Configuration.GetValue<string>("PathBase"));
 app.UseHttpsRedirection();
-
-var dataPath = app.Configuration.GetValue<string>("DataPath") ?? string.Empty;
-var scorer = new Scorer(dataPath: dataPath);
-var settler = new Settler(scorer);
-var combination = new Combination(dataPath: dataPath);
-var bot = new CombineBot(scorer, combination, settler);
+app.UseCors(ALLOWALLPOLICY);
 
 
-app.MapGet("/health", () => "Server is running");
-app.MapPost("/move", (MoveRequestModel request) => 
-{
-
-    if (request.Private is null || request.Private.Input is null)
-    {
-        return null;
-    }
-    
-    var result = bot.Arrange(request.Private.Input);
-    request.Private.Output = result;
-    return request.Private;
-});
+app.MapControllers();
 
 app.Run();
 
