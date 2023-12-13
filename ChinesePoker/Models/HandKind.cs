@@ -1,21 +1,17 @@
 namespace ChinesePoker.Models;
 
-public enum HandKindFive
+public enum HandKind
 {
-    HighCard = 1,
-    Pair = 2,
-    TwoPair = 3,
-    ThreeOfKind = 4,
-    Straight = 5,
-    Flush = 6,
-    FullHouse = 7,
-    FourOfKind = 8,
-    StraightFlush = 9
-}
-
-public enum HandKindThree
-{
-    HighCard = 11,
-    Pair = 12,
-    ThreeOfKind = 14,
+    HighCard5 = 1,
+    Pair5 = 2,
+    TwoPair5 = 3,
+    ThreeOfKind5 = 4,
+    Straight5 = 5,
+    Flush5 = 6,
+    FullHouse5 = 7,
+    FourOfKind5 = 8,
+    StraightFlush5 = 9,
+    HighCard3 = 11,
+    Pair3 = 12,
+    ThreeOfKind3 = 14
 }

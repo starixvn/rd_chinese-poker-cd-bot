@@ -1,5 +1,4 @@
 using ChinesePoker.Bots;
-using ChinesePoker.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -23,6 +22,7 @@ public class HomeController(IBot bot) : ControllerBase
         }
 
         var result = bot.Arrange(request.Private.Input);
+        GC.Collect();
         request.Private.Output = result;
         return request.Private;
     }
