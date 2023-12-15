@@ -12,4 +12,10 @@ public class SegmentCards
 
     [JsonPropertyName("segment_3")]
     public List<int> Segment3 { get; set; } = [];
+
+    public int S1Score { get; set; }
+
+    public int S2Score { get; set; }
+
+    public int S3Score { get; set; } 
 }

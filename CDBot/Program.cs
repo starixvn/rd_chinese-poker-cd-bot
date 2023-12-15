@@ -6,12 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dataPath = builder.Configuration.GetValue<string>("DataPath") ?? string.Empty;
 var scorer = new Scorer(dataPath: dataPath);
-builder.Services.AddSingleton<IScorer>(scorer);
-
 var combination = new Combination();
-builder.Services.AddSingleton<ICombination>(combination);
-
-builder.Services.AddSingleton<IBot>(new PickBot(scorer, combination));
+builder.Services.AddSingleton<IBot>(new PickBot(scorer, combination, new Settler()));
 
 builder.Services.AddControllers();
 

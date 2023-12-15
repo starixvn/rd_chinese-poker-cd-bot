@@ -11,10 +11,13 @@ public class PickBot : IBot
     const double SAMPLE_3 = 22100;
     private readonly IScorer _scorer;
     private readonly ICombination _combination;
+    private readonly ISettler _settler;
     private readonly Dictionary<int, double> _probType;
 
-    public PickBot(Scorer scorer, Combination combination)
+
+    public PickBot(Scorer scorer, Combination combination, Settler settler)
     {
+        _settler = settler;
         _scorer = scorer;
         _combination = combination;
         _probType = new() {
@@ -37,8 +40,10 @@ public class PickBot : IBot
     {
         var allCase = ProduceHands(input);
         var temp = allCase.OrderBy(x => x.Value[0].ProbKind).First();
-        var result = temp.Value.OrderByDescending(x => x.Score).First().Hand ?? new SegmentCards();
-        return result;
+        var candidates = temp.Value.ToDictionary(x => $"{temp.Value.IndexOf(x)}", x => x.Hand ?? new SegmentCards());
+        var settleResult = _settler.Settle(candidates);
+        var bestOption = settleResult.MaxBy(x => x.Value.ScoresSum);
+        return candidates[bestOption.Key];
     }
 
     private Dictionary<string, List<HandInfo>> ProduceHands(List<int> input)
@@ -58,6 +63,10 @@ public class PickBot : IBot
             var valueS1 = _scorer[segmentCards.Segment1];
             var valueS2 = _scorer[segmentCards.Segment2];
             var valueS3 = _scorer[segmentCards.Segment3];
+
+            segmentCards.S1Score = valueS1.Score;
+            segmentCards.S2Score = valueS2.Score;
+            segmentCards.S3Score = valueS3.Score;
 
             if ((valueS1.Score >= valueS2.Score) && (valueS2.Score >= valueS3.Score) && valueS1.Type != (int)HandKind.HighCard5)
             {

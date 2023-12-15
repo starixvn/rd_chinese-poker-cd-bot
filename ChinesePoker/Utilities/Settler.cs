@@ -2,7 +2,7 @@ using ChinesePoker.Models;
 
 namespace ChinesePoker.Utilities;
 
-public class Settler(Scorer scorer): ISettler
+public class Settler: ISettler
 {
 
     public Dictionary<string, SettleResult> Settle(Dictionary<string, SegmentCards> inputCards)
@@ -16,9 +16,9 @@ public class Settler(Scorer scorer): ISettler
         {
             var segmentValue = new SegmentValues()
             {
-                Segment1 = scorer[item.Value.Segment1].Score,
-                Segment2 = scorer[item.Value.Segment2].Score,
-                Segment3 = scorer[item.Value.Segment3].Score
+                Segment1 = item.Value.S1Score,
+                Segment2 = item.Value.S2Score,
+                Segment3 = item.Value.S3Score
             };
             
             if ((segmentValue.Segment1 < segmentValue.Segment2) || (segmentValue.Segment2 < segmentValue.Segment3))
